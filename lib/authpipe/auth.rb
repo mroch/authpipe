@@ -50,12 +50,12 @@ module Authpipe
 
       def parse_request(request)
         data = STDIN.readbytes(request.to_i)
-        authtype, field1, field2 = data.split(/\n/)
+        authservice, authtype, field1, field2 = data.split(/\n/)
         case authtype
         when 'login':
-          { :authtype => 'login', :username => field1, :password => field2 }
+          { :authservice => authservice, :authtype => 'login', :username => field1, :password => field2 }
         when 'cram-md5', 'cram-sha1', 'cram-sha256':
-          { :authtype => authtype, :challenge => field1, :response => field2 }
+          { :authservice => authservice, :authtype => authtype, :challenge => field1, :response => field2 }
         else
           raise UnsupportedAuthenticationType.new(authtype)
         end
